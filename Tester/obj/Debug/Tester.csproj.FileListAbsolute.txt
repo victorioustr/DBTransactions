@@ -1,0 +1,11 @@
+c:\users\vaio\documents\visual studio 2015\Projects\Tester\Tester\bin\Debug\Tester.exe.config
+c:\users\vaio\documents\visual studio 2015\Projects\Tester\Tester\bin\Debug\Tester.exe
+c:\users\vaio\documents\visual studio 2015\Projects\Tester\Tester\bin\Debug\Tester.pdb
+c:\users\vaio\documents\visual studio 2015\Projects\Tester\Tester\bin\Debug\Transactions.dll
+c:\users\vaio\documents\visual studio 2015\Projects\Tester\Tester\bin\Debug\Transactions.pdb
+c:\users\vaio\documents\visual studio 2015\Projects\Tester\Tester\obj\Debug\Tester.csprojResolveAssemblyReference.cache
+c:\users\vaio\documents\visual studio 2015\Projects\Tester\Tester\obj\Debug\Tester.Form1.resources
+c:\users\vaio\documents\visual studio 2015\Projects\Tester\Tester\obj\Debug\Tester.Properties.Resources.resources
+c:\users\vaio\documents\visual studio 2015\Projects\Tester\Tester\obj\Debug\Tester.csproj.GenerateResource.Cache
+c:\users\vaio\documents\visual studio 2015\Projects\Tester\Tester\obj\Debug\Tester.exe
+c:\users\vaio\documents\visual studio 2015\Projects\Tester\Tester\obj\Debug\Tester.pdb

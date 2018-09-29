@@ -1,0 +1,5 @@
+c:\users\vaio\documents\visual studio 2015\Projects\Transactions\Transactions\bin\Debug\Transactions.dll
+c:\users\vaio\documents\visual studio 2015\Projects\Transactions\Transactions\bin\Debug\Transactions.pdb
+c:\users\vaio\documents\visual studio 2015\Projects\Transactions\Transactions\obj\Debug\Transactions.dll
+c:\users\vaio\documents\visual studio 2015\Projects\Transactions\Transactions\obj\Debug\Transactions.pdb
+c:\users\vaio\documents\visual studio 2015\Projects\Transactions\Transactions\obj\Debug\Transactions.csprojResolveAssemblyReference.cache

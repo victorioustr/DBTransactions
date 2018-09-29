@@ -15,23 +15,30 @@ namespace Tester
 
         private void button1_Click(object sender, EventArgs e)
         {
-            using(MSSQL.Command Com = new MSSQL.Command())
+            using (MSSQL.Command Com = new MSSQL.Command())
             {
-                if(baglanti.State == System.Data.ConnectionState.Open) { baglanti.Close(); }
+                if (baglanti.State == ConnectionState.Open) { baglanti.Close(); }
                 baglanti.Open();
-                var urunAdi = Com.SQLCommand("select urunAdi from urunler where id = 2", baglanti, "string");
+                object urunAdi = Com.SQLCommand("select urunAdi from urunler where id = 2", baglanti, Transactions.Enums.TypeReturnType.String);
                 MessageBox.Show(urunAdi.ToString());
-                var urunler = Com.SQLCommand("select urunAdi from urunler", baglanti);
-                var urun = Com.SQLCommand("select * from urunler", baglanti).ExecuteReader();
+
+                // Yeni method testi
+                (bool status, string result) = Com.SQLCommand<string>("select urunAdi from urunler where id = 2", baglanti);
+                if (status)
+                    MessageBox.Show(result);
+
+                SqlCommand urunler = Com.SQLCommand("select urunAdi from urunler", baglanti);
+                SqlDataReader urun = Com.SQLCommand("select * from urunler", baglanti).ExecuteReader();
                 while (urun.Read())
                 {
                     MessageBox.Show(urun["urunAdi"].ToString());
                 }
-                using(MSSQL.DataReader Reader = new MSSQL.DataReader())
+                using (MSSQL.DataReader Reader = new MSSQL.DataReader())
                 {
                     urunler.Connection = baglanti;
-                    foreach(IDataRecord item in Reader.Reader(urunler))
+                    foreach (IDataRecord item in Reader.Reader(urunler))
                     {
+                        if (item == null) continue;
                         listBox1.Items.Add(item.GetValue(0));
                     }
                 }

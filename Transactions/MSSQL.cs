@@ -1,34 +1,32 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Data.SqlClient;
-using System.Windows;
 namespace Transactions
 {
-    public class MSSQL
+    public partial class MSSQL
     {
         public class Command : IDisposable
         {
-            public void Dispose()
+            #region ctor
+
+            public Command()
             {
-                Dispose(true);
-                GC.SuppressFinalize(this);
+
             }
-            public virtual void Dispose(bool _IDispose)
-            {
-                if (_IDispose)
-                {
-                    ExecuteScalar_Bool = false;
-                    ExecuteScalar_Double = 0;
-                    ExecuteScalar_Float = 0;
-                    ExecuteScalar_Int = 0;
-                    ExecuteScalar_Long = 0;
-                }
-            }
+
+            #endregion
+
+            #region fields
+
             private int ExecuteScalar_Int = 0;
             private double ExecuteScalar_Double = 0;
             private float ExecuteScalar_Float = 0;
             private long ExecuteScalar_Long = 0;
             private bool ExecuteScalar_Bool;
+
+            #endregion
+
+            #region methods
+
             /// <summary>
             /// Bu fonksiyon ile kısa yoldan SqlCommand nesnesini kullanabilirsin.
             /// </summary>
@@ -53,84 +51,71 @@ namespace Transactions
             /// <param name="ReturnType">Geri dönüş tipini gir, desteklenenler : string,int,double,float,long,bool. Örn: "int" veya "string"</param>
             /// <returns>Bu fonksiyon sql komutu ile istenilen TEK bir veriyi geri döndürür, örnek kullanımı : var Data = SQLCommand("select UserName from table where UserID = 1",Connection,"string"); data objesinin içerisinde komuttan dönen veri olacak. </returns>
             /// <seealso cref="MSSQL.Command.SQLCommand(string, SqlConnection, string)"/>
-            public object SQLCommand(string Command, SqlConnection Connection, string ReturnType)
+            public object SQLCommand(string Command, SqlConnection Connection, Enums.TypeReturnType ReturnType)
             {
                 using (SqlCommand Com = new SqlCommand())
                 {
                     Com.Connection = Connection;
                     Com.CommandText = Command;
-                    if (ReturnType != string.Empty)
+                    switch (ReturnType)
                     {
-                        switch (ReturnType)
-                        {
-                            case "string":
-                                return Com.ExecuteScalar().ToString();
-                            case "int":
-                                if (int.TryParse(Com.ExecuteScalar().ToString(), out ExecuteScalar_Int))
-                                    return ExecuteScalar_Int;
-                                else
-                                    return null;
-                            case "double":
-                                if (double.TryParse(Com.ExecuteScalar().ToString(), out ExecuteScalar_Double))
-                                    return ExecuteScalar_Double;
-                                else
-                                    return null;
-                            case "float":
-                                if (float.TryParse(Com.ExecuteScalar().ToString(), out ExecuteScalar_Float))
-                                    return ExecuteScalar_Float;
-                                else
-                                    return null;
-                            case "long":
-                                if (long.TryParse(Com.ExecuteScalar().ToString(), out ExecuteScalar_Long))
-                                    return ExecuteScalar_Long;
-                                else
-                                    return null;
-                            case "bool":
-                                if (bool.TryParse(Com.ExecuteScalar().ToString(), out ExecuteScalar_Bool))
-                                    return ExecuteScalar_Bool;
-                                else
-                                    return null;
-                            default:
-                                return "Return type algılanmadı !";
-                        }
-                    }
-                    else
-                    {
-                        return "Algılanmadı";
+                        case Enums.TypeReturnType.String:
+                            return Com.ExecuteScalar().ToString();
+                        case Enums.TypeReturnType.Integer:
+                            return int.TryParse(Com.ExecuteScalar().ToString(), out ExecuteScalar_Int) ? ExecuteScalar_Int : (int?)null;
+                        case Enums.TypeReturnType.Double:
+                            return double.TryParse(Com.ExecuteScalar().ToString(), out ExecuteScalar_Double) ? ExecuteScalar_Double : (double?)null;
+                        case Enums.TypeReturnType.Float:
+                            return float.TryParse(Com.ExecuteScalar().ToString(), out ExecuteScalar_Float) ? ExecuteScalar_Float : (float?)null;
+                        case Enums.TypeReturnType.Long:
+                            return long.TryParse(Com.ExecuteScalar().ToString(), out ExecuteScalar_Long) ? ExecuteScalar_Long : (long?)null;
+                        case Enums.TypeReturnType.Boolean:
+                            return bool.TryParse(Com.ExecuteScalar().ToString(), out ExecuteScalar_Bool) ? ExecuteScalar_Bool : (bool?)null;
+                        default:
+                            return "Return type algılanmadı !";
                     }
                 }
             }
-        }
-        public class DataReader : IDisposable
-        {
+
+            public (bool status, TType result) SQLCommand<TType>(string Command, SqlConnection Connection)
+            {
+                try
+                {
+                    using (SqlCommand Com = new SqlCommand(Command, Connection))
+                    {
+                        return (true, (TType)Convert.ChangeType(Com.ExecuteScalar(), typeof(TType)));
+                    }
+                }
+                catch
+                {
+                    return (false, default(TType));
+                }
+            }
+
+            #endregion
+
+            #region dispose
+
             public void Dispose()
             {
                 Dispose(true);
                 GC.SuppressFinalize(this);
             }
-            public virtual void Dispose(bool _Dispose)
-            {
-                if (_Dispose)
-                {
 
-                }
-            }
-            /// <summary>
-            /// Bağlantısı,komutu tanımlanmış SqlCommand nesnesini parametre olarak ekle.Fonksiyon Sql komutundan dönen verileri sana yansıtacak.
-            /// </summary>
-            /// <param name="Command">SqlCommand nesnesi</param>
-            /// <returns>Geriye belirsiz tipte verilerin değerlerini döndürür.</returns>
-            /// <seealso cref="MSSQL.DataReader.Reader(SqlCommand)"/>
-            public IEnumerable<object> Reader(SqlCommand Command)
+            public virtual void Dispose(bool _IDispose)
             {
-                using(SqlDataReader Read = Command.ExecuteReader())
+                if (_IDispose)
                 {
-                    while(Read.Read())
-                    {
-                        yield return Read;
-                    }
+                    ExecuteScalar_Bool = false;
+                    ExecuteScalar_Double = 0;
+                    ExecuteScalar_Float = 0;
+                    ExecuteScalar_Int = 0;
+                    ExecuteScalar_Long = 0;
                 }
             }
+
+            #endregion
+
         }
     }
 }
